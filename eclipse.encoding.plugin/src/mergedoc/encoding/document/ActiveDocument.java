@@ -1,7 +1,10 @@
 package mergedoc.encoding.document;
 
-import static java.lang.String.*;
-import static org.eclipse.core.runtime.content.IContentDescription.*;
+import static java.lang.String.format;
+import static org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_16BE;
+import static org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_16LE;
+import static org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_8;
+import static org.eclipse.core.runtime.content.IContentDescription.BYTE_ORDER_MARK;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +29,7 @@ import org.eclipse.ui.internal.WorkbenchWindow;
 import mergedoc.encoding.Activator;
 import mergedoc.encoding.Charsets;
 import mergedoc.encoding.IActiveDocumentAgentCallback;
+import mergedoc.encoding.IndentChars;
 import mergedoc.encoding.JarResource;
 
 /**
@@ -47,6 +51,7 @@ public class ActiveDocument {
 	protected String contentCharset;
 	protected byte[] bom;
 	protected String lineSeparator;
+	protected String indentChar;
 
 	public ActiveDocument(IEditorPart editor, IActiveDocumentAgentCallback callback) {
 		init(editor, callback);
@@ -57,11 +62,17 @@ public class ActiveDocument {
 
 		this.editor = editor;
 		this.callback = callback;
-		if (editor == null) throw new IllegalArgumentException("editor must not be null.");
-		if (callback == null) throw new IllegalArgumentException("callback must not be null.");
+		if (editor == null) {
+            throw new IllegalArgumentException("editor must not be null.");
+        }
+		if (callback == null) {
+            throw new IllegalArgumentException("callback must not be null.");
+        }
 
-		this.encodingSupport = editor.getAdapter(IEncodingSupport.class);
-		if (encodingSupport == null) throw new IllegalArgumentException("editor must provide IEncodingSupport.");
+		encodingSupport = editor.getAdapter(IEncodingSupport.class);
+		if (encodingSupport == null) {
+            throw new IllegalArgumentException("editor must provide IEncodingSupport.");
+        }
 
 		updateStatus();
 	}
@@ -105,6 +116,10 @@ public class ActiveDocument {
 	}
 	public String getLineSeparator() {
 		return lineSeparator;
+	}
+
+	public String getIndentChar() {
+	    return indentChar;
 	}
 
 	/**
@@ -220,6 +235,7 @@ public class ActiveDocument {
 		String contentCharsetOld = contentCharset;
 		byte[] bomOld = bom;
 		String lineSeparatorOld = lineSeparator;
+		String indentCharOld = indentChar;
 
 		updateStatus();
 
@@ -228,7 +244,8 @@ public class ActiveDocument {
 			!StringUtils.equals(detectedCharsetOld, detectedCharset) ||
 			!StringUtils.equals(contentCharsetOld, contentCharset) ||
 			bomOld != bom ||
-			!StringUtils.equals(lineSeparatorOld, lineSeparator)
+			!StringUtils.equals(lineSeparatorOld, lineSeparator) ||
+			!StringUtils.equals(indentCharOld, indentChar)
 		) {
 			// Invoke the callback if the encoding information is changed
 			callback.statusChanged();
@@ -247,6 +264,7 @@ public class ActiveDocument {
 		contentTypeEncoding = null;
 		bom = null;
 		lineSeparator = null;
+		indentChar = null;
 
 		if (encodingSupport != null) {
 			currentEncoding = encodingSupport.getEncoding();

@@ -15,6 +15,7 @@ import org.eclipse.ui.IFileEditorInput;
 import mergedoc.encoding.Activator;
 import mergedoc.encoding.Charsets;
 import mergedoc.encoding.IActiveDocumentAgentCallback;
+import mergedoc.encoding.IndentChars;
 import mergedoc.encoding.LineSeparators;
 import mergedoc.encoding.Resources;
 
@@ -105,6 +106,7 @@ public class WorkspaceFileDocument extends ActiveDocument {
 			if (lineSeparator == null) {
 				lineSeparator = LineSeparators.resolve(file);
 			}
+			indentChar = IndentChars.ofContent(getInputStream(), getCurrentEncoding());
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {

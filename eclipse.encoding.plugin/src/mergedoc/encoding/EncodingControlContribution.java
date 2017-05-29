@@ -1,6 +1,6 @@
 package mergedoc.encoding;
 
-import static mergedoc.encoding.Activator.*;
+import static mergedoc.encoding.Activator.prefIs;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,6 +30,7 @@ public class EncodingControlContribution extends
 	private Composite statusBar;
 	private EncodingLabel encodingLabel;
 	private LineSeparatorLabel lineSeparatorLabel;
+    private IndentLabel indentCharLabel;
 
 	public EncodingControlContribution() {
 	}
@@ -51,7 +52,7 @@ public class EncodingControlContribution extends
 		statusBar = new Composite(parent, SWT.NONE);
 
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		gridLayout.numColumns = 5;
 		gridLayout.marginHeight = 0;
 		statusBar.setLayout(gridLayout);
 
@@ -59,6 +60,9 @@ public class EncodingControlContribution extends
 		Label separator = new Label(statusBar, SWT.SEPARATOR | SWT.VERTICAL);
 		separator.setLayoutData(new GridData(GridData.FILL_BOTH));
 		lineSeparatorLabel = new LineSeparatorLabel(agent, statusBar, 40);
+		Label separator2 = new Label(statusBar, SWT.SEPARATOR | SWT.VERTICAL);
+		separator2.setLayoutData(new GridData(GridData.FILL_BOTH));
+		indentCharLabel = new IndentLabel(agent, statusBar, 100);
 
 		fillControl();
 		return statusBar;
@@ -99,6 +103,7 @@ public class EncodingControlContribution extends
 
 		encodingLabel.initMenu();
 		lineSeparatorLabel.initMenu();
+		indentCharLabel.initMenu();
 	}
 
 	@Override
