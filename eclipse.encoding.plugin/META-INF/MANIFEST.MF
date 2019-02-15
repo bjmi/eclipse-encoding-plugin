@@ -14,10 +14,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.jface.text;bundle-version="3.7.0",
  org.eclipse.ui.forms;bundle-version="3.5.0",
  com.ibm.icu;bundle-version="4.0.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ui
-Bundle-ClassPath: lib/juniversalchardet-2.0.0-backport-java6.jar,
- lib/commons-lang3-3.4.jar,
- lib/commons-io-2.5.jar,
- .
+Bundle-ClassPath: .,
+ lib/juniversalchardet-2.3.0.jar,
+ lib/commons-lang3-3.8.1.jar,
+ lib/commons-io-2.6.jar
